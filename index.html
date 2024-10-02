@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Real-time Chat</title>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+
+    <!-- Include Socket.IO library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+
+      // Listen for 'chat message' event from the server
+      socket.on('chat message', function (msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        document.getElementById('messages').appendChild(item);
+      });
+
+      // Send message to the server
+      document.getElementById('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = document.getElementById('input');
+        socket.emit('chat message', input.value); // Send message to server
+        input.value = '';
+      });
+    </script>
+  </body>
+</html>
